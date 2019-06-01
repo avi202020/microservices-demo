@@ -7,7 +7,7 @@ ENV PROJECT github.com/GoogleCloudPlatform/microservices-demo/src/frontend
 WORKDIR /go/src/$PROJECT
 
 # restore dependencies
-COPY Gopkg.* ./
+COPY src/frontend/Gopkg.* ./
 RUN dep ensure --vendor-only -v
 COPY . .
 RUN go install .
