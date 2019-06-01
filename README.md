@@ -1,4 +1,29 @@
-# Hipster Shop: Cloud-Native Microservices Demo Application
+# Hipster Shop: Cloud-Native Microservices Demo Application for Sysdig Anthos Event
+
+## Setup:
+1. Create a cluster using the `create-cluster.sh` script
+2. Apply the sysdig agents
+3. Create a hipster-app namespace
+4. Run the command: `kubectl apply -f release/kubernetes-manifests.yaml`
+5. The Jenkins pipeline is built only for the frontend microservice. So you can go to `src/frontend` and make changes there. There are more instructions in the `README.md` file there.
+--
+## CI/CD with scanning demo:
+6. Add a vulnerability to the frontend microservice, expose port 22 in the Dockerfile and use an old version of Go or something.
+7. You can make changes to src/frontend/templates/header.html and change the page title under the head section. Change the title to Hipster Shop VERSION 2.0.
+--
+## Performance Demo:
+8. Run the command: `kubectl delete deployment checkoutservice` to see the performance degradation in Response Time and Error Rate. Check the `K8s Golden Signals for Hipster` dashboard.
+9. Check the capture file and go to HTTP Errors and drill in. Show the connection problem to the given IP and port. Then run `kubectl get svc` to show that the frontend service can't talk to the checkout service.
+10. Run the command: `kubectl apply -f release/kubernetes-manifests.yaml` to bring things back to normal.
+--
+## Runtime Security Demo based on MITRE matrix:
+11. Run a terminal shell in container
+12. Run others
+
+
+Destroy the cluster using the `destroy-cluster.sh` script
+
+--
 
 This project contains a 10-tier microservices application. The application is a
 web-based e-commerce app called **“Hipster Shop”** where users can browse items,
