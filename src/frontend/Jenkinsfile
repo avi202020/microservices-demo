@@ -39,7 +39,7 @@ node {
         sh '''
             # deploy the app
             gcloud container clusters get-credentials sysdig-anthos-demo --zone us-central1-a --project vibrant-tree-219615
-            kubectl set image deployment/sysdig-anthos sysdig-anthos=gcr.io/vibrant-tree-219615/sysdig-anthos-demo/frontend-prod:${GITID} -n hipster-app
+            kubectl set image deployment/frontend frontend=gcr.io/vibrant-tree-219615/sysdig-anthos-demo/frontend-prod:${GITID} -n hipster-app
         '''
     }
 }
