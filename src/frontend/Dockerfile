@@ -9,7 +9,7 @@ WORKDIR /go/src/$PROJECT
 # restore dependencies
 COPY src/frontend/Gopkg.* ./
 RUN dep ensure --vendor-only -v
-COPY . .
+COPY src/frontend/. .
 RUN go install .
 
 FROM alpine as release
@@ -17,7 +17,7 @@ RUN apk add --no-cache ca-certificates \
     busybox-extras net-tools bind-tools
 WORKDIR /frontend
 COPY --from=builder /go/bin/frontend /frontend/server
-COPY ./templates ./templates
-COPY ./static ./static
+COPY src/frontend/templates ./templates
+COPY src/frontend/static ./static
 EXPOSE 8080
 ENTRYPOINT ["/frontend/server"]
