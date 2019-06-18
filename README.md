@@ -3,10 +3,9 @@
 ## Setup:
 1. Create a cluster using the `./create-cluster.sh` script
 2. Apply the sysdig agents `./sysdig-agents/sysdig-agents-GKE-install.sh`
-3. Create a hipster-app namespace
-4. Run the command: `kubectl apply -f release/kubernetes-manifests.yaml`
-5a. Show the hipster app by going to the loadbalancer IP of the frontend service.
-5b. The Jenkins pipeline is built only for the frontend microservice. So you can go to `src/frontend` and make changes there. There are more instructions in the `README.md` file there.
+3. Run the hipsterapp script `./hipsterapp.sh`
+4. Show the hipster app by going to the loadbalancer IP of the frontend service.
+5. The Jenkins pipeline is built only for the frontend microservice. So you can go to `src/frontend` and make changes there. There are more instructions in the `README.md` file there.
 --
 ## CI/CD with scanning demo:
 6. Add a vulnerability to the frontend microservice, expose port 22 in the Dockerfile and use an old version of Go or something.
