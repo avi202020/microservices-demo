@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-privileged
+  labels:
+    app: nginx-privileged
+spec:
+  containers:
+  - name: nginx-privileged
+    image: samgabrail/networktools
+    ports:
+    - containerPort: 80
+    securityContext:
+      privileged: true

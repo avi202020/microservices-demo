@@ -2,7 +2,7 @@
 
 ## Setup:
 1. Create a cluster using the `./create-cluster.sh` script
-2. Apply the sysdig agents `./sysdig-agents/sysdig-agents-GKE-install.sh`
+2. Apply the sysdig agents `cd sysdig-agents && ./sysdig-agents-GKE-install.sh && cd ..`
 3. Run the hipsterapp script `./hipsterapp.sh`
 4. Show the hipster app by going to the loadbalancer IP of the frontend service.
 5. The Jenkins pipeline is built only for the frontend microservice. So you can go to `src/frontend` and make changes there. There are more instructions in the `README.md` file there.
@@ -17,16 +17,20 @@
 10. Run the command: `kubectl apply -f release/kubernetes-manifests.yaml` to bring things back to normal.
 --
 ## Runtime Security Demo based on MITRE matrix:
-11. Execution: Run a terminal shell in container
-12. Privilege Escalation: Launch Privileged Container
-13. Defense Evasion: Delete Bash History
+11. Privilege Escalation: Launch Privileged Container -- use `kubectl apply -f privilegedContainer.yaml` which will trigger the policy
+12. Execution: Run a terminal shell in container -- use `kubectl exec -it nginx-privileged bash`
+13. Discovery: Launch Suspicious Netowrk Tool in Container -- use `nmap 10.35.244.69 -Pn -p 50051`
 14. Credential Access: Search Private Keys or Passwords
-15. Discovery: Launch Suspicious Netowrk Tool in Container -- use `kubectl run -i --tty nmap3 --image=samgabrail/networktools -- bash`
-16. Exfiltration: Interpreted procs outbound network activity 
+15. Exfiltration: Interpreted procs outbound network activity -- in the nmap container run `python /app/connect.py` this will trigger the policy
+16. Defense Evasion: Delete Bash History -- first create the file because it's not there sometimes `touch ~/.bash_history` then delete it `shred -f ~/.bash_history`
 
 
 Destroy the cluster using the `destroy-cluster.sh` script
 
+
+--
+## Additional Notes:
+- You can do kubectl run using `kubectl run -i --tty nmap --image=samgabrail/networktools -- bash`
 --
 
 This project contains a 10-tier microservices application. The application is a
