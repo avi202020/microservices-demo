@@ -1,8 +1,8 @@
 # Hipster Shop: Cloud-Native Microservices Demo Application for Sysdig Anthos Event
 
 ## Setup:
-1. Create a cluster using the `create-cluster.sh` script
-2. Apply the sysdig agents
+1. Create a cluster using the `./create-cluster.sh` script
+2. Apply the sysdig agents `./sysdig-agents/sysdig-agents-GKE-install.sh`
 3. Create a hipster-app namespace
 4. Run the command: `kubectl apply -f release/kubernetes-manifests.yaml`
 5a. Show the hipster app by going to the loadbalancer IP of the frontend service.
@@ -18,8 +18,12 @@
 10. Run the command: `kubectl apply -f release/kubernetes-manifests.yaml` to bring things back to normal.
 --
 ## Runtime Security Demo based on MITRE matrix:
-11. Run a terminal shell in container
-12. Run others
+11. Execution: Run a terminal shell in container
+12. Privilege Escalation: Launch Privileged Container
+13. Defense Evasion: Delete Bash History
+14. Credential Access: Search Private Keys or Passwords
+15. Discovery: Launch Suspicious Netowrk Tool in Container -- use `kubectl run -i --tty nmap3 --image=samgabrail/networktools -- bash`
+16. Exfiltration: Interpreted procs outbound network activity 
 
 
 Destroy the cluster using the `destroy-cluster.sh` script
