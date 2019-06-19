@@ -6,33 +6,40 @@
 3. Run the hipsterapp script `./hipsterapp.sh`
 4. Show the hipster app by going to the loadbalancer IP of the frontend service.
 5. The Jenkins pipeline is built only for the frontend microservice. So you can go to `src/frontend` and make changes there. There are more instructions in the `README.md` file there.
---
+
 ## CI/CD with scanning demo:
 6. Add a vulnerability to the frontend microservice, expose port 22 in the Dockerfile and use an old version of Go or something.
 7. You can make changes to src/frontend/templates/header.html and change the page title under the head section. Change the title to Hipster Shop VERSION 2.0.
---
+
 ## Performance Demo:
 8. Run the command: `kubectl delete deployment checkoutservice` to see the performance degradation in Response Time and Error Rate. Check the `K8s Golden Signals for Hipster` dashboard.
 9. Check the capture file and go to HTTP Errors and drill in. Show the connection problem to the given IP and port. Then run `kubectl get svc` to show that the frontend service can't talk to the checkout service.
 10. Run the command: `kubectl apply -f release/kubernetes-manifests.yaml` to bring things back to normal.
---
+
 ## Runtime Security Demo based on MITRE matrix:
 11. Privilege Escalation: Launch Privileged Container -- use `kubectl apply -f privilegedContainer.yaml` which will trigger the policy
 12. Execution: Run a terminal shell in container -- use `kubectl exec -it nginx-privileged bash`
-13. Discovery: Launch Suspicious Netowrk Tool in Container -- use `nmap 10.35.244.69 -Pn -p 50051`
-14. Credential Access: Search Private Keys or Passwords
-15. Exfiltration: Interpreted procs outbound network activity -- in the nmap container run `python /app/connect.py` this will trigger the policy
+13. Discovery: Launch Suspicious Network Tool in Container -- use `nmap 10.35.244.69 -Pn -p 50051`
+14. Credential Access: Search Private Keys or Passwords -- use `grep -ri -e "BEGIN RSA PRIVATE" /app`
+15. Exfiltration: Interpreted procs outbound network activity -- in the nmap container run `cp /app/key/throwAway.pem my_file.txt && python /app/connect.py` this will trigger the policy
 16. Defense Evasion: Delete Bash History -- first create the file because it's not there sometimes `touch ~/.bash_history` then delete it `shred -f ~/.bash_history`
-
+17. Check the capture file generated based on the Exfiltration event. (Sysdig Inspect Sometimes it shows that `Unable to load data` that's okay you can still follow the below instructions)
+a. Click Spy Users
+b. Filter on `container.image contains networktools`
+c. Drill into the command `cp /app/key/throwAway.pem my_file.txt`
+d. Go to files and I/O stream `/app/key/throwAway.pem`
+e. Show how that file contains a private key
+f. Go back to spy users and leave the `container.image contains networktools` filter
+g. Drill into `python /app/connect.py`
+h. Go to files and I/O stream `python /app/connect.py`
+i. Talk about the scp operation that exfiltrated the private key to a hacker's machine
 
 Destroy the cluster using the `destroy-cluster.sh` script
 
-
---
 ## Additional Notes:
 - You can do kubectl run using `kubectl run -i --tty nmap --image=samgabrail/networktools -- bash`
---
 
+## Project Notes:
 This project contains a 10-tier microservices application. The application is a
 web-based e-commerce app called **“Hipster Shop”** where users can browse items,
 add them to the cart, and purchase them.

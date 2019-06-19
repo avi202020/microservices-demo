@@ -20,8 +20,9 @@ data:
      #ssl_verify_certificate: false
      #log:
      #  file_priority: debug 
+     snaplen: 2000
      new_k8s: true
-     k8s_cluster_name: GKE-Hipster-App
+     k8s_cluster_name: GKE-Cloud-Hipster-App
      percentiles: [50, 95, 99]
      app_checks_limit: 1000
      prometheus:
