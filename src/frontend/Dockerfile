@@ -14,7 +14,7 @@ RUN go install .
 
 FROM alpine:3.7 as release
 RUN apk add --no-cache ca-certificates \
-    busybox-extras net-tools bind-tools freetype zlib
+    busybox-extras net-tools bind-tools freetype zlib erlang=20.1.7-r2
 WORKDIR /frontend
 COPY --from=builder /go/bin/frontend /frontend/server
 COPY src/frontend/templates ./templates
