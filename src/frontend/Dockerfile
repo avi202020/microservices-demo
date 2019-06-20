@@ -12,9 +12,13 @@ RUN dep ensure --vendor-only -v
 COPY src/frontend/. .
 RUN go install .
 
-FROM alpine:3.7 as release
-RUN apk add --no-cache ca-certificates \
+#FROM alpine as release
+FROM alpine:3.4 as release
+#RUN apk add --no-cache ca-certificates \
     busybox-extras net-tools bind-tools freetype zlib erlang=20.1.7-r2 curl
+RUN apk add --no-cache ca-certificates \
+    net-tools bind-tools freetype zlib curl
+
 WORKDIR /frontend
 COPY --from=builder /go/bin/frontend /frontend/server
 COPY src/frontend/templates ./templates
