@@ -12,18 +12,20 @@ RUN dep ensure --vendor-only -v
 COPY src/frontend/. .
 RUN go install .
 
-#FROM alpine as release
-FROM alpine:3.4 as release
-#RUN apk add --no-cache ca-certificates \
-#    busybox-extras net-tools bind-tools freetype zlib erlang=20.1.7-r2 curl
+## Introduce vulnerabilities below
+
+FROM alpine as release
+#FROM alpine:3.4 as release
 RUN apk add --no-cache ca-certificates \
-    net-tools bind-tools freetype zlib curl
-#
+    busybox-extras net-tools bind-tools freetype zlib erlang=20.1.7-r2 curl
+#RUN apk add --no-cache ca-certificates \
+#    net-tools bind-tools freetype zlib curl
+
 WORKDIR /frontend
 COPY --from=builder /go/bin/frontend /frontend/server
 COPY src/frontend/templates ./templates
 COPY src/frontend/static ./static
-EXPOSE 8080
-EXPOSE 22
+#EXPOSE 8080
+#EXPOSE 22
 ENV PASSWORD xyz
 ENTRYPOINT ["/frontend/server"]
