@@ -18,7 +18,7 @@ FROM alpine:3.4 as release
 #    busybox-extras net-tools bind-tools freetype zlib erlang=20.1.7-r2 curl
 RUN apk add --no-cache ca-certificates \
     net-tools bind-tools freetype zlib curl
-
+#
 WORKDIR /frontend
 COPY --from=builder /go/bin/frontend /frontend/server
 COPY src/frontend/templates ./templates
