@@ -9,7 +9,7 @@
 
 ## CI/CD with scanning demo:
 6. Add a vulnerability to the frontend microservice, expose port 22 in the Dockerfile and use an old version of Go or something.
-7. You can make changes to src/frontend/templates/header.html and change the page title under the head section. Change the title to Hipster Shop VERSION 2.0.
+7. You can make changes to src/frontend/templates/header.html and change the page title under the head section. Change the title to Hipster Shop VERSION 2.0 under `<a href="/" class="navbar-brand d-flex align-items-center">`
 
 ## Performance Demo:
 8. Run the command: `kubectl delete deployment checkoutservice` to see the performance degradation in Response Time and Error Rate. Check the `K8s Golden Signals for Hipster` dashboard.
@@ -24,15 +24,16 @@
 15. Exfiltration: Interpreted procs outbound network activity -- in the nmap container run `cp /app/key/throwAway.pem my_file.txt && python /app/connect.py` this will trigger the policy
 16. Defense Evasion: Delete Bash History -- first create the file because it's not there sometimes `touch ~/.bash_history` then delete it `shred -f ~/.bash_history`
 17. Check the capture file generated based on the Exfiltration event. (Sysdig Inspect Sometimes it shows that `Unable to load data` that's okay you can still follow the below instructions)
-a. Click Spy Users
-b. Filter on `container.image contains networktools`
-c. Drill into the command `cp /app/key/throwAway.pem my_file.txt`
-d. Go to files and I/O stream `/app/key/throwAway.pem`
-e. Show how that file contains a private key
-f. Go back to spy users and leave the `container.image contains networktools` filter
-g. Drill into `python /app/connect.py`
-h. Go to files and I/O stream `python /app/connect.py`
-i. Talk about the scp operation that exfiltrated the private key to a hacker's machine
+   a. Click Spy Users
+   b. Filter on `container.image contains networktools`
+   c. Drill into the command `cp /app/key/throwAway.pem my_file.txt`
+   d. Go to files and I/O stream `/app/key/throwAway.pem`
+   e. Show how that file contains a private key
+   f. Go back to spy users and leave the `container.image contains networktools` filter
+   g. Drill into `python /app/connect.py`
+   h. Go to files and I/O stream `python /app/connect.py`
+   i. Talk about the scp operation that exfiltrated the private key to a hacker's machine
+18. Talk about how we could have looked for private key files during the scanning process.
 
 Destroy the cluster using the `destroy-cluster.sh` script
 
