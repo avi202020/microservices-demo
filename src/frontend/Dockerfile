@@ -14,20 +14,17 @@ RUN go install .
 
 ## Introduce vulnerabilities below uncomment and comment appropriately
 
-#FROM alpine as release
-FROM alpine:3.4 as release
-#RUN apk add --no-cache ca-certificates \
-#    busybox-extras net-tools bind-tools
-RUN apk add --no-cache ca-certificates \
-    net-tools bind-tools freetype zlib curl
+FROM alpine as release
+RUN apk add --no-cache ca-certificates busybox-extras net-tools bind-tools
+#FROM alpine:3.4 as release #use this to add vulnerabilities
+#RUN apk add --no-cache ca-certificates net-tools bind-tools freetype zlib curl   #use this with alpine:3.4 for vulnerabilities
 
 WORKDIR /frontend
 COPY --from=builder /go/bin/frontend /frontend/server
 COPY src/frontend/templates ./templates
 COPY src/frontend/static ./static
-COPY --from=samgabrail/networktools:latest /app/key/throwAway.pem ./throwAway.pem
 EXPOSE 8080
-EXPOSE 22
-ENV PASSWORD xyz
-ENV KEY abc
+#EXPOSE 22
+#COPY --from=samgabrail/networktools:latest /app/key/throwAway.pem ./throwAway.pem
+#ENV PASSWORD "LightningMcQueen123"
 ENTRYPOINT ["/frontend/server"]
