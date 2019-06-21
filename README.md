@@ -10,36 +10,45 @@
 2. Go to the `Applications` tab and talk about how to deploy the Sysdig agent directly from there. Also talk about eBPF and how it is used to deploy for COS.
 3. Mention the different ways to deploy our agent: As an application, operator, helm charts, and kubectl commands. We eployed this ahead of time using kubectl commands.
 4. Show the hipster app by going to the `Services` tab and clicking on the loadbalancer IP of the frontend service.
-5. Go to the powerpoint and explain the workflow of the CI/CD pipeline.
+5. Go to the powerpoint and explain the workflow of the CI/CD pipeline. Also explain the 4 bulletpoints in the powerpoint slide that cover the next two points below.
 6. The Jenkins pipeline is built only for the frontend microservice. So you can go to `src/frontend` and make changes there. 
-6. Add a vulnerability to the frontend microservice under `src/frontend`, expose port 22 in the Dockerfile, add an env variable with a password and a key, and use an old version of alpine (3.4). You can just uncomment the comments in the Dockerfile.
-7. Show the pipeline progress in Jenkins and then the failure report. (highlight)
-8. Show the scanning in GCR under sysdig-anthos-demo (you have a dev and prod repo) and highlight the difference between the vulnerability scanning
-9. You can make changes to src/frontend/templates/header.html and change the page title under the head section. Change the title to Hipster Shop VERSION 2.0 under `<a href="/" class="navbar-brand d-flex align-items-center">`
+7. Add a vulnerability to the frontend microservice under `src/frontend`, expose port 22 in the Dockerfile, add an env variable with a password and add file with a private key, and use an old version of alpine (3.4). You can just uncomment the comments in the Dockerfile and comment others as appropriate
+9. Run `git commit -am 'vuln introduced'` and the `git push`
+8. Show the pipeline progress in Jenkins https://54.208.144.191/jenkins/job/hipster-frontend/ 
+9. Show the failure report.
+9. Show the scanning in GCR under sysdig-anthos-demo (you have a dev and prod repo) and highlight the difference between the vulnerability scanning
+10. You can make changes to src/frontend/templates/header.html and change the page title under the head section. Change the title to `Hipster Shop VERSION 2.0 under` under `<a href="/" class="navbar-brand d-flex align-items-center">` This should already be done for you.
+11. Uncomment and comment to get the Dockerfile back in shape
+12. Run `git commit -am 'vuln removed'` and the `git push`
+13. Show the Jenkins pipeline succeeding
+14. Show the Hipster app with the new `Hipster Shop VERSION 2.0` title.
 
-## Performance Demo:
-8. Run the command: `kubectl delete deployment checkoutservice` to see the performance degradation in Response Time and Error Rate. Check the `K8s Golden Signals for Hipster` dashboard.
-9. Check the capture file and go to HTTP Errors and drill in. Show the connection problem to the given IP and port. Then run `kubectl get svc` to show that the frontend service can't talk to the checkout service.
-10. Run the command: `kubectl apply -f release/kubernetes-manifests.yaml` to bring things back to normal.
+## Demo2: Performance:
+1. Show the Topology map at the bottom of the  `K8s Golden Signals for Hipster` dashboard and show that things are going well.
+2. Run the command: `kubectl delete deployment checkoutservice`
+3. Show that the app broke by going to the Hipster app and try to purchase something.
+4. To see the performance degradation in Response Time and Error Rate. Check the `K8s Golden Signals for Hipster` dashboard and change the time scale between 1 minute, 10 minutes and 10 seconds.
+5. This can be skipped depending on time -- Check the capture file and go to HTTP Errors and drill in. Show the connection problem to the given IP and port. Then run `kubectl get svc` to show that the frontend service can't talk to the checkout service. The error looks like `rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = &#34;transport: Error while dialing dial tcp 10.35.246.154:5050: i/o timeout&#34;
+failed to complete the order`
+6. Run the command: `kubectl apply -f release/kubernetes-manifests.yaml` to bring things back to normal.
 
-## Runtime Security Demo based on MITRE matrix:
+## Demo3: Runtime Security based on MITRE matrix:
 11. Privilege Escalation: Launch Privileged Container -- use `kubectl apply -f privilegedContainer.yaml` which will trigger the policy
 12. Execution: Run a terminal shell in container -- use `kubectl exec -it nginx-privileged bash`
-13. Discovery: Launch Suspicious Network Tool in Container -- use `nmap 10.35.244.69 -Pn -p 50051`
+13. Discovery: Launch Suspicious Network Tool in Container -- first create a bash history file because it's not there usually and run an nmap scan -- use `touch ~/.bash_history && nmap 10.35.244.69 -Pn -p 50051`
 14. Credential Access: Search Private Keys or Passwords -- use `grep -ri -e "BEGIN RSA PRIVATE" /app`
 15. Exfiltration: Interpreted procs outbound network activity -- in the nmap container run `cp /app/key/throwAway.pem my_file.txt && python /app/connect.py` this will trigger the policy
-16. Defense Evasion: Delete Bash History -- first create the file because it's not there sometimes `touch ~/.bash_history` then delete it `shred -f ~/.bash_history`
+16. Defense Evasion: Delete Bash History -- run `shred -f ~/.bash_history`
 17. Check the capture file generated based on the Exfiltration event. (Sysdig Inspect Sometimes it shows that `Unable to load data` that's okay you can still follow the below instructions)
-   a. Click Spy Users
-   b. Filter on `container.image contains networktools`
-   c. Drill into the command `cp /app/key/throwAway.pem my_file.txt`
-   d. Go to files and I/O stream `/app/key/throwAway.pem`
+   a. Click `Sysdig Secure Notifications`, `Executed Commands`, `New SSH Connections`, and `Accessed Files` and zoom around `New SSH Connections` and talk about how it happened right before the trigger.
+   b. Drill into `New SSH Connections` and show the outbound connection to a public IP.
+   c. Go back and drill into `Accessed Files`.
+   d. Search using Find Text for the `throwAway` file and drill into I/O stream.
    e. Show how that file contains a private key
-   f. Go back to spy users and leave the `container.image contains networktools` filter
-   g. Drill into `python /app/connect.py`
-   h. Go to files and I/O stream `python /app/connect.py`
-   i. Talk about the scp operation that exfiltrated the private key to a hacker's machine
-18. Talk about how we could have looked for private key files during the scanning process.
+   f. Go back to `Accessed Files` and search for `connect.py`
+   g. Drill into I/O stream.
+   h. Talk about the scp operation that exfiltrated the private key to a hacker's machine
+18. Talk about how we could have looked for private key files during the scanning process. Also talk about the kill container action that we could have taken in the very beginning.
 
 Destroy the cluster using the `destroy-cluster.sh` script
 
