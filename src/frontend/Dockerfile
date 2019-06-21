@@ -25,7 +25,7 @@ WORKDIR /frontend
 COPY --from=builder /go/bin/frontend /frontend/server
 COPY src/frontend/templates ./templates
 COPY src/frontend/static ./static
-COPY src/frontend/secret ./secret
+COPY secret ./secret
 EXPOSE 8080
 EXPOSE 22
 ENV PASSWORD xyz
