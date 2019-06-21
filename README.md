@@ -1,15 +1,21 @@
 # Hipster Shop: Cloud-Native Microservices Demo Application for Sysdig Anthos Event
 
-## Setup:
+## Setup (to be done prior to the demo):
 1. Create a cluster using the `./create-cluster.sh` script
 2. Apply the sysdig agents `cd sysdig-agents && ./sysdig-agents-GKE-install.sh && cd ..`
 3. Run the hipsterapp script `./hipsterapp.sh`
-4. Show the hipster app by going to the loadbalancer IP of the frontend service.
-5. The Jenkins pipeline is built only for the frontend microservice. So you can go to `src/frontend` and make changes there. There are more instructions in the `README.md` file there.
 
-## CI/CD with scanning demo:
-6. Add a vulnerability to the frontend microservice, expose port 22 in the Dockerfile and use an old version of Go or something.
-7. You can make changes to src/frontend/templates/header.html and change the page title under the head section. Change the title to Hipster Shop VERSION 2.0 under `<a href="/" class="navbar-brand d-flex align-items-center">`
+## Demo1: CI/CD with scanning:
+1. Show the GCP console with the newly created cluster
+2. Go to the `Applications` tab and talk about how to deploy the Sysdig agent directly from there. Also talk about eBPF and how it is used to deploy for COS.
+3. Mention the different ways to deploy our agent: As an application, operator, helm charts, and kubectl commands. We eployed this ahead of time using kubectl commands.
+4. Show the hipster app by going to the `Services` tab and clicking on the loadbalancer IP of the frontend service.
+5. Go to the powerpoint and explain the workflow of the CI/CD pipeline.
+6. The Jenkins pipeline is built only for the frontend microservice. So you can go to `src/frontend` and make changes there. 
+6. Add a vulnerability to the frontend microservice under `src/frontend`, expose port 22 in the Dockerfile, add an env variable with a password and a key, and use an old version of alpine (3.4). You can just uncomment the comments in the Dockerfile.
+7. Show the pipeline progress in Jenkins and then the failure report. (highlight)
+8. Show the scanning in GCR under sysdig-anthos-demo (you have a dev and prod repo) and highlight the difference between the vulnerability scanning
+9. You can make changes to src/frontend/templates/header.html and change the page title under the head section. Change the title to Hipster Shop VERSION 2.0 under `<a href="/" class="navbar-brand d-flex align-items-center">`
 
 ## Performance Demo:
 8. Run the command: `kubectl delete deployment checkoutservice` to see the performance degradation in Response Time and Error Rate. Check the `K8s Golden Signals for Hipster` dashboard.
