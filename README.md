@@ -8,7 +8,7 @@
 ## Demo1: CI/CD with scanning:
 1. Show the GCP console with the newly created cluster
 2. Go to the `Applications` tab and talk about how to deploy the Sysdig agent directly from there. Also talk about eBPF and how it is used to deploy for COS.
-3. Mention the different ways to deploy our agent: As an application, operator, helm charts, and kubectl commands. We eployed this ahead of time using kubectl commands.
+3. Mention the different ways to deploy our agent: As an application, operator, helm charts, and kubectl commands. We deployed this ahead of time using kubectl commands.
 4. Show the hipster app by going to the `Services` tab and clicking on the loadbalancer IP of the frontend service.
 5. Go to the powerpoint and explain the workflow of the CI/CD pipeline. Also explain the 4 bulletpoints in the powerpoint slide that cover the next two points below.
 6. The Jenkins pipeline is built only for the frontend microservice. So you can go to `src/frontend` and make changes there. 
