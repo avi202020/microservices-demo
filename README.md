@@ -27,7 +27,7 @@
 ## Demo2: Performance:
 1. Show the Topology map at the bottom of the  `K8s Golden Signals for Hipster` dashboard and show that things are going well.
 2. Run the command: `kubectl delete deployment checkoutservice`
-3. Show that the app broke by going to the Hipster app and try to purchase something.
+3. Show that the app broke by going to the Hipster app and try to purchase something. This will also generate a 500 error for the capture file. Sometimes the load generator doesn't generate this in time.
 4. To see the performance degradation in Response Time and Error Rate. Check the `K8s Golden Signals for Hipster` dashboard and change the time scale between 1 minute, 10 minutes and 10 seconds.
 5. This can be skipped depending on time -- Check the capture file and go to HTTP Errors and drill in. Show the connection problem to the given IP and port. Then run `kubectl get svc` to show that the frontend service can't talk to the checkout service. The error looks like `rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = &#34;transport: Error while dialing dial tcp 10.35.246.154:5050: i/o timeout&#34;
 failed to complete the order`
