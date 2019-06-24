@@ -16,8 +16,9 @@ RUN go install .
 
 FROM alpine as release
 RUN apk add --no-cache ca-certificates busybox-extras net-tools bind-tools
-#FROM alpine:3.4 as release #use this to add vulnerabilities
-#RUN apk add --no-cache ca-certificates net-tools bind-tools freetype zlib curl   #use this with alpine:3.4 for vulnerabilities
+#use this to add vulnerabilities
+#FROM alpine:3.4 as release
+#RUN apk add --no-cache ca-certificates net-tools bind-tools freetype zlib curl
 
 WORKDIR /frontend
 COPY --from=builder /go/bin/frontend /frontend/server
