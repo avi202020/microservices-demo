@@ -5,7 +5,7 @@ RUN apk add --no-cache ca-certificates git && \
 
 ENV PROJECT github.com/GoogleCloudPlatform/microservices-demo/src/frontend
 WORKDIR /go/src/$PROJECT
-
+#
 # restore dependencies
 COPY src/frontend/Gopkg.* ./
 RUN dep ensure --vendor-only -v
