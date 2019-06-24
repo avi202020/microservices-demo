@@ -22,6 +22,7 @@
 12. Run `git commit -am 'vuln removed'` and the `git push`
 13. Show the Jenkins pipeline succeeding
 14. Show the Hipster app with the new `Hipster Shop VERSION 2.0` title.
+15. Finish off by showing the Sysdig Scanning Policy that was in place. It's called `GoogleEventDemo`
 
 ## Demo2: Performance:
 1. Show the Topology map at the bottom of the  `K8s Golden Signals for Hipster` dashboard and show that things are going well.
