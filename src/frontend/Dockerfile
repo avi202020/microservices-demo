@@ -14,8 +14,8 @@ RUN go install .
 
 ## Introduce vulnerabilities below uncomment and comment appropriately
 
-#FROM alpine as release
-#RUN apk add --no-cache ca-certificates busybox-extras net-tools bind-tools
+FROM alpine as release
+RUN apk add --no-cache ca-certificates busybox-extras net-tools bind-tools
 #use this to add vulnerabilities
 #FROM alpine:3.4 as release
 #RUN apk add --no-cache ca-certificates net-tools bind-tools freetype zlib curl
