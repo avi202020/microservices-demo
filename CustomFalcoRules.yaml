@@ -1,0 +1,51 @@
+####################
+# Your custom rules!
+####################
+
+# Add new rules, like this one
+# - rule: A shell is run in a container
+#   desc: An event will trigger every time you run a shell in a container
+#   condition: evt.type = execve and evt.dir=< and container.id != host and proc.name = bash
+#   output: "Suspect shell run in container (user=%user.name %container.info shell=%proc.name parent=%proc.pname cmdline=%proc.cmdline)"
+#   priority: ERROR
+#   tags: [shell]
+
+# Or override any rule, macro, or list from the Default Rules
+
+
+# This rule is not enabled by default, as there are legitimate use
+# cases for these tools on hosts. If you want to enable it, modify the
+# following macro.
+- macro: consider_network_tools_on_host
+  condition: proc.cmdline contains nmap
+
+- rule: Launch Suspicious Network Tool on Host -- Sam
+  desc: Detect network tools launched on the host
+  condition: >
+    spawned_process and
+    not container and
+    consider_network_tools_on_host and
+    network_tool_procs
+  output: >
+    Network tool launched on host (user=%user.name command=%proc.cmdline parent_process=%proc.pname)
+  priority: NOTICE
+  tags: [network, process, mitre_discovery, mitre_exfiltration]
+
+- macro: outbound
+  condition: >
+    (((evt.type = connect and evt.dir=<) or
+      (evt.type in (sendto,sendmsg) and evt.dir=< and
+       fd.l4proto != tcp and fd.connected=false and fd.name_changed=true)) and
+     (fd.typechar = 4 or fd.typechar = 6) and
+     (fd.ip != "0.0.0.0" and fd.net != "127.0.0.0/8" and fd.snet != "10.0.0.0/8") and
+     (evt.rawres >= 0 or evt.res = EINPROGRESS))
+
+- rule: Interpreted procs outbound network activity
+  desc: Any outbound network activity performed by any interpreted program (perl, python, ruby, etc.)
+  condition: >
+    (outbound and interpreted_procs)
+  output: >
+    Interpreted program performed outgoing network connection
+    (user=%user.name command=%proc.cmdline connection=%fd.name container_id=%container.id image=%container.image.repository)
+  priority: NOTICE
+  tags: [network, mitre_exfiltration]

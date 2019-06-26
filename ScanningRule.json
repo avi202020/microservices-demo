@@ -1,0 +1,110 @@
+{
+    "comment": "Stop the following:\n- Vulnerabilities that are medium or above.\n- Port 22 exposed\n- Environment variables that are Passwords or Secrets\n- Environment variables that are Keys",
+    "id": "policy_1M08nbfBqsEJktdcahZfTCWm3N7",
+    "name": "GoogleEventDemo",
+    "rules": [
+        {
+            "action": "STOP",
+            "gate": "vulnerabilities",
+            "id": "rule_1M08nWvgT0V0zTymnb3jtmCydl7",
+            "params": [
+                {
+                    "name": "fix_available",
+                    "value": "true"
+                },
+                {
+                    "name": "package_type",
+                    "value": "all"
+                },
+                {
+                    "name": "severity",
+                    "value": "medium"
+                },
+                {
+                    "name": "severity_comparison",
+                    "value": ">="
+                }
+            ],
+            "trigger": "package"
+        },
+        {
+            "action": "STOP",
+            "gate": "dockerfile",
+            "id": "rule_1MxjQvd2APnYbcygDEnruKAPNhy",
+            "params": [
+                {
+                    "name": "ports",
+                    "value": "22"
+                },
+                {
+                    "name": "type",
+                    "value": "blacklist"
+                }
+            ],
+            "trigger": "exposed_ports"
+        },
+        {
+            "action": "WARN",
+            "gate": "vulnerabilities",
+            "id": "rule_1MxjQwJcyWxpSlZwcBlGpwR7VPk",
+            "params": [
+                {
+                    "name": "max_days_since_sync",
+                    "value": "2"
+                }
+            ],
+            "trigger": "stale_feed_data"
+        },
+        {
+            "action": "WARN",
+            "gate": "dockerfile",
+            "id": "rule_1Mxjb97SNRH7uo875wrlYbtJHfA",
+            "params": [
+                {
+                    "name": "check",
+                    "value": "not_exists"
+                },
+                {
+                    "name": "instruction",
+                    "value": "HEALTHCHECK"
+                }
+            ],
+            "trigger": "instruction"
+        },
+        {
+            "action": "STOP",
+            "gate": "secret_scans",
+            "id": "rule_1MxkdK3czwOktEOEbAI1WEVf4yy",
+            "params": [
+                {
+                    "name": "content_regex_name",
+                    "value": "['AWS_ACCESS_KEY', 'AWS_SECRET_KEY', 'PRIV_KEY', 'DOCKER_AUTH', 'API_KEY']"
+                }
+            ],
+            "trigger": "content_regex_checks"
+        },
+        {
+            "action": "STOP",
+            "gate": "dockerfile",
+            "id": "rule_1MxkijjYxGTcgC9JEIgnesaUk60",
+            "params": [
+                {
+                    "name": "check",
+                    "value": "like"
+                },
+                {
+                    "name": "instruction",
+                    "value": "ENV"
+                },
+                {
+                    "name": "value",
+                    "value": ".*(password|PASSWORD|passwd|PASSWD|AWS|secret|SECRET).*"
+                }
+            ],
+            "trigger": "instruction"
+        }
+    ],
+    "version": "1_0",
+    "policyBundleId": "default",
+    "isDefault": false
+}

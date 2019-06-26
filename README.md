@@ -55,7 +55,10 @@ Destroy the cluster using the `destroy-cluster.sh` script
 
 ## Additional Notes:
 - You can do kubectl run using `kubectl run -i --tty nmap --image=samgabrail/networktools -- bash`
+- There are three files in this folder called `ScanningRule.json`, `CustomFalcoRules.yaml`, and `MITRE_SysdigSecure_Policies.json` that are needed to be deployed via the sdc-cli or the API to Sysdig Secure.
+- The `samgabrail/networktools` container that is used in this demo is found on dockerhub at https://hub.docker.com/r/samgabrail/networktools and the github repo is `samgabrail/falco` at https://github.com/samgabrail/falco
 
+# The Notes below are the default notes for the Hipster App taken from their github repo at https://github.com/GoogleCloudPlatform/microservices-demo
 ## Project Notes:
 This project contains a 10-tier microservices application. The application is a
 web-based e-commerce app called **“Hipster Shop”** where users can browse items,

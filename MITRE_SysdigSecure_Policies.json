@@ -1,0 +1,152 @@
+{
+    "id": 7362,
+    "version": 13,
+    "createdOn": 1543948213000,
+    "modifiedOn": 1561149213000,
+    "name": "MITRE - Execution - Terminal shell in container",
+    "description": "A shell was used as the entrypoint/exec point into a container with an attached terminal.",
+    "severity": 1,
+    "enabled": true,
+    "hostScope": true,
+    "containerScope": true,
+    "falcoConfiguration": {
+        "onDefault": "DEFAULT_MATCH_EFFECT_NEXT",
+        "fields": [],
+        "ruleNameRegEx": "Terminal shell in container"
+    },
+    "notificationChannelIds": [],
+    "actions": [],
+    "policyEventsCount": 0,
+    "modifiedByUserId": 24693,
+    "isBuiltin": true,
+    "isManual": true
+}
+
+{
+    "id": 7358,
+    "version": 3,
+    "createdOn": 1543948213000,
+    "modifiedOn": 1560894921000,
+    "name": "MITRE - Privilege Escalation - Launch Privileged Container",
+    "description": "Detect the initial process started in a privileged container. Exceptions are made for known trusted images.",
+    "severity": 4,
+    "enabled": true,
+    "hostScope": true,
+    "containerScope": true,
+    "falcoConfiguration": {
+        "onDefault": "DEFAULT_MATCH_EFFECT_NEXT",
+        "fields": [],
+        "ruleNameRegEx": "Launch Privileged Container"
+    },
+    "notificationChannelIds": [],
+    "actions": [],
+    "policyEventsCount": 0,
+    "modifiedByUserId": 24693,
+    "isBuiltin": true,
+    "isManual": true
+}
+
+{
+    "id": 13682,
+    "version": 5,
+    "createdOn": 1559596502000,
+    "modifiedOn": 1560973923000,
+    "name": "MITRE - Discovery - Launch Suspicious Network Tool in Container",
+    "description": "MITRE Discovery",
+    "severity": 4,
+    "enabled": true,
+    "hostScope": true,
+    "containerScope": true,
+    "falcoConfiguration": {
+        "onDefault": "DEFAULT_MATCH_EFFECT_NEXT",
+        "fields": [],
+        "ruleNameRegEx": "Launch Suspicious Network Tool in Container"
+    },
+    "notificationChannelIds": [],
+    "actions": [],
+    "policyEventsCount": 0,
+    "modifiedByUserId": 24693,
+    "isBuiltin": false,
+    "isManual": true
+}
+
+{
+    "id": 20781,
+    "version": 7,
+    "createdOn": 1560887955000,
+    "modifiedOn": 1560977563000,
+    "name": "MITRE - Exfiltration - Interpreted procs outbound network activity",
+    "description": "Any outbound network activity performed by any interpreted program (perl, python, ruby, etc.)",
+    "severity": 1,
+    "enabled": true,
+    "hostScope": false,
+    "containerScope": true,
+    "scope": "container.image contains \"networktools\"",
+    "falcoConfiguration": {
+        "onDefault": "DEFAULT_MATCH_EFFECT_NEXT",
+        "fields": [],
+        "ruleNameRegEx": "Interpreted procs outbound network activity"
+    },
+    "notificationChannelIds": [],
+    "actions": [
+        {
+            "type": "POLICY_ACTION_CAPTURE",
+            "beforeEventNs": 10000000000,
+            "afterEventNs": 20000000000,
+            "isLimitedToContainer": false
+        }
+    ],
+    "policyEventsCount": 0,
+    "modifiedByUserId": 24693,
+    "isBuiltin": false,
+    "isManual": true
+}
+
+{
+    "id": 20862,
+    "version": 5,
+    "createdOn": 1560893785000,
+    "modifiedOn": 1561149220000,
+    "name": "MITRE - Defense Evasion - Delete Bash History",
+    "description": "Hide tracks by deleting the bash history",
+    "severity": 1,
+    "enabled": true,
+    "hostScope": true,
+    "containerScope": true,
+    "falcoConfiguration": {
+        "onDefault": "DEFAULT_MATCH_EFFECT_NEXT",
+        "fields": [],
+        "ruleNameRegEx": "Delete Bash History"
+    },
+    "notificationChannelIds": [],
+    "actions": [],
+    "policyEventsCount": 0,
+    "modifiedByUserId": 24693,
+    "isBuiltin": false,
+    "isManual": true
+}
+
+{
+    "id": 20983,
+    "version": 1,
+    "createdOn": 1560969208000,
+    "modifiedOn": 1560969208000,
+    "name": "MITRE - Credential Access - Search Private Keys or Passwords",
+    "description": "Detect grep private keys or passwords activity.",
+    "severity": 1,
+    "enabled": true,
+    "hostScope": true,
+    "containerScope": true,
+    "falcoConfiguration": {
+        "onDefault": "DEFAULT_MATCH_EFFECT_NEXT",
+        "fields": [],
+        "ruleNameRegEx": "Search Private Keys or Passwords"
+    },
+    "notificationChannelIds": [],
+    "actions": [],
+    "policyEventsCount": 0,
+    "modifiedByUserId": 24693,
+    "isBuiltin": false,
+    "isManual": true
+}
+
